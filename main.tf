@@ -66,6 +66,18 @@ resource "aws_instance" "ec2docker" {
     Name = "DockerServer"
   }
 
+   provisioner "file" {
+    source      = "docker.service"
+    destination = "/tmp/docker.service"
+
+   connection {
+      type        = "ssh"
+      user        = "ec2-user"
+      host        = "${aws_instance.ec2docker.private_ip}"
+      private_key = "${tls_private_key.gereted_key.private_key_pem}"
+    }
+
+}
 
   provisioner "file" {
     source      = "script.sh"
