@@ -79,22 +79,7 @@ resource "aws_instance" "ec2docker" {
 
   }
 
-   provisioner "file" {
-    source      = "docker.service"
-    destination = "/tmp/docker.service"
-
-   connection {
-      type        = "ssh"
-      user        = "ec2-user"
-      host        = "${aws_instance.ec2docker.private_ip}"
-      private_key = "${tls_private_key.gereted_key.private_key_pem}"
-    }
-
-}
-
-
-
-  provisioner "remote-exec" {
+provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/script.sh",
       "/tmp/script.sh WORDPRESS_DB_USER=${var.webapp_db_user} WORDPRESS_DB_PASSWORD=${var.webapp_db_password} WORDPRESS_DB_HOST=${aws_db_instance.wordpress_db.endpoint} WORDPRESS_DB_NAME=${var.webapp_db_name}",
